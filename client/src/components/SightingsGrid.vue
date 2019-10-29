@@ -11,16 +11,25 @@
 
 <script>
 import { eventBus } from '../main';
+import SightingsService from '../services/SightingService.js'
 export default {
 	name: "sightings-grid",
-	props: ["sightings"],
 	filters: {
 		format(value){
 			return new Date(value).toLocaleString().substring(0, 10);
 		}
 	},
-	methods: {
+	data(){
+		return {
+			sightings: []
+		}
+	},
+	mounted() {
+		SightingsService.getSightings()
+		.then(sighting => this.sightings = sighting);
 
+		eventBus.$on('sighting-added', (data) =>
+		this.sightings.push(data));
 	}
 }
 </script>
