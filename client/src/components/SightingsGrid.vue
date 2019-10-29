@@ -1,10 +1,10 @@
 <template lang="html">
 	<div id="sightingsGrid">
-		<div class="sighting" v-for="sighting in sightings">
+		<div class="sighting" v-for="(sighting,index) in sightings">
 			<h2>{{ sighting.species }}</h2>
 			<p>{{ sighting.location }} on {{ sighting.date|format }}</p>
 
-			<button>Delete Sighting</button>
+			<button v-on:click="deleteASighting(sighting._id,index)">Delete Sighting</button>
 		</div>
 	</div>
 </template>
@@ -30,7 +30,14 @@ export default {
 
 		eventBus.$on('sighting-added', (data) =>
 		this.sightings.push(data));
+	},
+	methods: {
+		deleteASighting(id, index){
+			SightingsService.deleteSighting(id);
+			this.sightings.splice(index,1);
+		}
 	}
+
 }
 </script>
 
